@@ -16,8 +16,7 @@
                     <span class="starting-player" v-if="gameConfig.starting_player_id == 1"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
                           <div class="legs">
-                       
-                            <span class="leg-count">0</span>
+                            <span class="leg-count">{{ player_one.leg }}</span>
                         </div>
                     <span class="current-player" v-if="gameConfig.current_player_id == 1"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
@@ -31,8 +30,7 @@
                     <span class="starting-player" v-if="gameConfig.starting_player_id == 2"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
                     <div class="legs">
-                      
-                        <span class="leg-count">0</span>
+                        <span class="leg-count">{{ player_two.leg }}</span>
                     </div>
                     <span class="current-player" v-if="gameConfig.current_player_id == 2"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
@@ -127,7 +125,7 @@ interface Player {
     name: string
     nickname: string
     score: number
-    level: number
+    leg: number
     statistics: Stats
 }
 
@@ -172,15 +170,15 @@ class Player {
     name: string;
     nickname: string;
     score: number;
-    level: number;
+    leg: number;
     stats: Statistics
 
-    constructor(id: number, name: string, nickname: string, score: number, level: number, stats: Statistics) {
+    constructor(id: number, name: string, nickname: string, score: number, leg: number, stats: Statistics) {
         this.id = id
         this.name = name
         this.nickname = nickname
         this.score = score
-        this.level = level
+        this.leg = leg
         this.stats = stats
     }
 }
@@ -253,27 +251,63 @@ const submit_score = async () => {
 
         let _temp_score = player_one.value.score - Number(score_input.value)
 
-        if (_temp_score !== player_one.value.score) {
-            await counter("count1", player_one.value.score, _temp_score, 500);
+        if (_temp_score > 0) {
+
+            if (_temp_score !== player_one.value.score) {
+                await counter("count1", player_one.value.score, _temp_score, 500);
+            }
+
+            player_one.value.score = _temp_score
+
+            score_table.value.push({
+                round: gameConfig.value.round,
+                score: player_one.value.score,
+                player_id: player_one.value.id,
+                score_thrown: Number(score_input.value),
+                name: player_one.value.name
+            })
+
+            // stats
+            player_one_stats.value.average = Number(getCurrentAvg(player_one.value.id))
+            player_one_stats.value.last_dart = Number(score_input.value);
+            player_one_stats.value.darts += 3;
+
+            gameConfig.value.current_player_id = 2
+            gameConfig.value.round = gameConfig.value.round + .5
+
         }
 
-        player_one.value.score = _temp_score
+        // winner
+        if (_temp_score == 0) { 
 
-        score_table.value.push({
-            round: gameConfig.value.round,
-            score: player_one.value.score,
-            player_id: player_one.value.id,
-            score_thrown: Number(score_input.value),
-            name: player_one.value.name
-        })
+            player_one.value.leg++
 
-        // stats
-        player_one_stats.value.average = Number(getCurrentAvg(player_one.value.id))
-        player_one_stats.value.last_dart = Number(score_input.value);
-        player_one_stats.value.darts += 3;
+            if (_temp_score !== player_one.value.score) {
+                counter("count1", player_one.value.score, _temp_score, 500);
+            }
 
-        gameConfig.value.current_player_id = 2
-        gameConfig.value.round = gameConfig.value.round + .5
+            player_one.value.score = _temp_score
+
+            score_table.value.push({
+                round: gameConfig.value.round,
+                score: player_one.value.score,
+                player_id: player_one.value.id,
+                score_thrown: Number(score_input.value),
+                name: player_one.value.name
+            })
+
+
+            await reset_stats()
+
+            if (gameConfig.value.starting_player_id == 1) { 
+                gameConfig.value.starting_player_id = 2
+                gameConfig.value.current_player_id = 2
+            }
+
+            gameConfig.value.round = 0
+
+        }
+
 
         if (_checkoutData.hasOwnProperty(player_two.value.score)) {
             checkdarts.value = _checkoutData[player_two.value.score]
@@ -284,27 +318,61 @@ const submit_score = async () => {
         // Player 2
         let _temp_score = player_two.value.score - Number(score_input.value)
 
-        if (_temp_score !== player_two.value.score) {
-            await counter("count2", player_two.value.score, _temp_score, 500);
+        if (_temp_score > 0) {
+
+            if (_temp_score !== player_two.value.score) {
+                await counter("count2", player_two.value.score, _temp_score, 500);
+            }
+
+            player_two.value.score = _temp_score
+
+            score_table.value.push({
+                round: -Math.round(-gameConfig.value.round), // negotiate hack to round down .5
+                score: player_two.value.score,
+                player_id: player_two.value.id,
+                score_thrown: Number(score_input.value),
+                name: player_two.value.name
+            })
+
+            // stats
+            player_two_stats.value.average = Number(getCurrentAvg(player_two.value.id))
+            player_two_stats.value.last_dart = Number(score_input.value);
+            player_two_stats.value.darts += 3;
+
+            gameConfig.value.current_player_id = 1
+            gameConfig.value.round = gameConfig.value.round + .5
         }
 
-        player_two.value.score = _temp_score
+        // winner
+        if (_temp_score == 0) {
 
-        score_table.value.push({
-            round: -Math.round(-gameConfig.value.round), // negotiate hack to round down .5
-            score: player_two.value.score,
-            player_id: player_two.value.id,
-            score_thrown: Number(score_input.value),
-            name: player_two.value.name
-        })
+            player_two.value.leg++
 
-        // stats
-        player_two_stats.value.average = Number(getCurrentAvg(player_two.value.id))
-        player_two_stats.value.last_dart = Number(score_input.value);
-        player_two_stats.value.darts += 3;
+            if (_temp_score !== player_two.value.score) {
+                counter("count1", player_two.value.score, _temp_score, 500);
+            }
 
-        gameConfig.value.current_player_id = 1
-        gameConfig.value.round = gameConfig.value.round + .5
+            player_two.value.score = _temp_score
+
+            score_table.value.push({
+                round: gameConfig.value.round,
+                score: player_two.value.score,
+                player_id: player_two.value.id,
+                score_thrown: Number(score_input.value),
+                name: player_two.value.name
+            })
+
+
+            await reset_stats()
+
+            if (gameConfig.value.starting_player_id == 2) {
+                gameConfig.value.starting_player_id = 1
+                gameConfig.value.current_player_id = 1
+            }
+            
+            gameConfig.value.round = 0
+
+        }
 
         if (_checkoutData.hasOwnProperty(player_one.value.score)) {
             checkdarts.value = _checkoutData[player_one.value.score]
@@ -335,7 +403,18 @@ const quitGame = () => {
 
 const emit = defineEmits(['reset'])
 
+const reset_stats = async () => { 
+    player_two.value.score = 501
+    player_one.value.score = 501
 
+    player_one_stats.value.average = 0
+    player_one_stats.value.last_dart = 0;
+    player_one_stats.value.darts = 0;
+    player_two_stats.value.average = 0
+    player_two_stats.value.last_dart = 0;
+    player_two_stats.value.darts = 0;
+
+}
 
 
 // helper functions

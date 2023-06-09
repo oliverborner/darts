@@ -29,6 +29,9 @@
 
 
 <script setup lang="ts">
+// Code written by Oliver Borner
+// UI UX by Oliver Borner
+
 import { ref, defineComponent } from "vue"
 import Game from './components/Game.vue'
 
