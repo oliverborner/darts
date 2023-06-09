@@ -45,12 +45,12 @@
                 <div class="stats-player">
                     <span class="">Last Dart </span>
                     <span class="">Darts</span>
-                    <span class="">3-Dart-AVG </span>
+                    <span class="">3-Dart AVG </span>
                 </div>
                 <div class="stats-player white">
-                    <span class="">120 </span>
-                    <span class="">6</span>
-                    <span class="">80,3%</span>
+                    <span class="">{{ player_one_stats.last_dart }} </span>
+                    <span class="">{{ player_one_stats.darts }} </span>
+                    <span class="">{{ player_one_stats.average.toFixed(1) }} </span>
                 </div>
             </div>
 
@@ -58,12 +58,12 @@
                 <div class="stats-player">
                     <span class="">Last Dart </span>
                     <span class="">Darts</span>
-                    <span class="">3-Dart-AVG </span>
+                    <span class="">3-Dart AVG </span>
                 </div>
                 <div class="stats-player white">
-                        <span class="">0 </span>
-                        <span class="">0</span>
-                        <span class="">0</span>
+                        <span class="">{{ player_two_stats.last_dart }}</span>
+                        <span class="">{{ player_two_stats.darts }} </span>
+                        <span class="">{{ player_two_stats.average.toFixed(1) }} </span>
                 </div>  
             </div>
         </section>
@@ -132,6 +132,8 @@ interface Player {
 }
 
 interface Stats {
+    darts: number
+    last_dart: number
     highfinish: number
     onehundredeighties: number
     average: number
@@ -184,12 +186,16 @@ class Player {
 }
 
 class Statistics {
+    darts: number;
+    last_dart: number;
     highfinish: number;
     onehundredeighties: number;
     average: number;
     checkout_ratio: number;
 
-    constructor(highfinish: number, onehundredeighties: number, average: number, checkout_ratio: number) {
+    constructor(darts: number, last_dart: number, highfinish: number, onehundredeighties: number, average: number, checkout_ratio: number) {
+        this.darts = darts
+        this.last_dart = last_dart
         this.highfinish = highfinish;
         this.onehundredeighties = onehundredeighties;
         this.average = average;
@@ -261,6 +267,11 @@ const submit_score = async () => {
             name: player_one.value.name
         })
 
+        // stats
+        player_one_stats.value.average = Number(getCurrentAvg(player_one.value.id))
+        player_one_stats.value.last_dart = Number(score_input.value);
+        player_one_stats.value.darts += 3;
+
         gameConfig.value.current_player_id = 2
         gameConfig.value.round = gameConfig.value.round + .5
 
@@ -287,6 +298,11 @@ const submit_score = async () => {
             name: player_two.value.name
         })
 
+        // stats
+        player_two_stats.value.average = Number(getCurrentAvg(player_two.value.id))
+        player_two_stats.value.last_dart = Number(score_input.value);
+        player_two_stats.value.darts += 3;
+
         gameConfig.value.current_player_id = 1
         gameConfig.value.round = gameConfig.value.round + .5
 
@@ -300,8 +316,8 @@ const submit_score = async () => {
 }
 
 const initGame = () => {
-    player_one_stats.value = new Statistics(0, 0, 0, 0)
-    player_two_stats.value = new Statistics(0, 0, 0, 0)
+    player_one_stats.value = new Statistics(0, 0, 0, 0, 0, 0)
+    player_two_stats.value = new Statistics(0, 0, 0, 0, 0, 0)
 
     // initialize players
     player_one.value = new Player(1, gameConfig.value.player_one_name, gameConfig.value.player_one_name, gameConfig.value.score, 0, player_one_stats.value)
@@ -338,7 +354,25 @@ const counter = async (id: string, start: number, end: number, duration: number)
         }, step);
 }
 
+// calc averages
+const getCurrentAvg = (player_id: number | string ) => {
 
+    let _total = 0
+    let _countItems = 0
+
+    score_table.value.forEach(item => {
+       
+        if (item.player_id == player_id) {
+            _countItems++
+            _total += item.score_thrown
+        }
+
+    })
+
+    _total = _total / _countItems
+
+    return  _total
+}
 
 </script>
 

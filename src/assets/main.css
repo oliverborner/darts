@@ -148,6 +148,11 @@ a,
     background: #aff097;
     transition: 300ms all;
 }
+/* @media (hover: none) {
+    a:hover { color: inherit; }
+    button { color: inherit; }
+}
+ */
  * {
       -ms-touch-action: manipulation;
     touch-action: manipulation;
@@ -343,6 +348,7 @@ a,
 }
 .white{
     color: #fff;
+    font-weight: bold !important;
 }
 #infos{
     z-index: 5;
@@ -365,6 +371,8 @@ a,
 @media (min-width: 1024px) {
 
 }
+
+
 
 /* @media (hover: hover) {
   .num-button{
