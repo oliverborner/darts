@@ -12,26 +12,59 @@
                 <div class="big-number" id="count1">{{ player_one.score }}</div>
                 <span class="player-nickname">{{ player_one.nickname }}</span>
                 <!-- <span class="player-name">{{ player_one.name }}</span> -->
-                <span class="starting-player" v-if="gameConfig.starting_player_id == 1"></span>
-                <span class="current-player" v-if="gameConfig.current_player_id == 1"></span>
+                <div class="card-footer">
+                    <span class="starting-player" v-if="gameConfig.starting_player_id == 1"></span>
+                    <span v-else class="empty-circle">&nbsp;</span>
+                          <div class="legs">
+                       
+                            <span class="leg-count">0</span>
+                        </div>
+                    <span class="current-player" v-if="gameConfig.current_player_id == 1"></span>
+                    <span v-else class="empty-circle">&nbsp;</span>
+                </div>
             </div>
             <div id="player-card" :class="gameConfig.current_player_id == 2 ? 'active-card' : ''">
                 <div class="big-number" id="count2">{{ player_two.score }}</div>
                 <span class="player-nickname">{{ player_two.nickname }}</span>
                 <!-- <span class="player-name">{{ player_two.name }}</span> -->
-                <span class="starting-player" v-if="gameConfig.starting_player_id == 2"></span>
-                <span class="current-player" v-if="gameConfig.current_player_id == 2"></span>
+                <div class="card-footer">
+                    <span class="starting-player" v-if="gameConfig.starting_player_id == 2"></span>
+                    <span v-else class="empty-circle">&nbsp;</span>
+                    <div class="legs">
+                      
+                        <span class="leg-count">0</span>
+                    </div>
+                    <span class="current-player" v-if="gameConfig.current_player_id == 2"></span>
+                    <span v-else class="empty-circle">&nbsp;</span>
+                </div>
             </div>
         </section>
 
         <section id="stats">
-            <div class="stats-player">
-                <span class="">Legs </span>
-                <span class="">AVG</span>
+            <div class="stats-next">
+                <div class="stats-player">
+                    <span class="">Last Dart </span>
+                    <span class="">Darts</span>
+                    <span class="">3-Dart-AVG </span>
+                </div>
+                <div class="stats-player white">
+                    <span class="">120 </span>
+                    <span class="">6</span>
+                    <span class="">80,3%</span>
+                </div>
             </div>
-            <div class="stats-player">
-                <span class="">Legs</span>
-                <span class="">AVG</span>
+
+            <div class="stats-next">
+                <div class="stats-player">
+                    <span class="">Last Dart </span>
+                    <span class="">Darts</span>
+                    <span class="">3-Dart-AVG </span>
+                </div>
+                <div class="stats-player white">
+                        <span class="">0 </span>
+                        <span class="">0</span>
+                        <span class="">0</span>
+                </div>  
             </div>
         </section>
 
