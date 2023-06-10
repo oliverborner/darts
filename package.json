@@ -5,6 +5,8 @@
   "homepage": "https://oliverborner.github.io/darts/",
   "scripts": {
     "dev": "vite",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
