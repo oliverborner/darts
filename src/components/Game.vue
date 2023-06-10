@@ -131,8 +131,8 @@
                 </tr>
                  <tr>
                     <td>Highest Dart</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.highest_dart }}</td>
+                    <td>{{ player_two_stats.highest_dart }}</td>
                 </tr>
                 <th colspan="3"> Checkouts</th>
                 <tr>
@@ -187,12 +187,12 @@
                     <td>{{ player_two_stats.eighties }}</td>
                 </tr>
             </table>
-            <br>
+           <!--  <br>
             <p>Gamelog:</p>
             <div v-for="entry in score_table.slice(1)">
                {{ entry.round }},  Player: {{ entry.player_id }} {{ entry.name }}, Score: {{ entry.score }},  Score Thrown: {{ entry.score_thrown }}  
             </div>
-
+ -->
         </div>
     </div> 
 
@@ -217,6 +217,7 @@ interface Stats {
     darts: number
     last_dart: number
     highfinish: number
+    highest_dart: number
     onehundredeighties: number
     onehundredsixties: number
     onehundredfourties: number
@@ -276,6 +277,7 @@ class Statistics {
     darts: number;
     last_dart: number;
     highfinish: number;
+    highest_dart: number;
     onehundredeighties: number;
     average: number;
     checkout_ratio: number;
@@ -285,7 +287,7 @@ class Statistics {
     onehundreds: number;
     eighties: number;
 
-    constructor(darts: number, last_dart: number, highfinish: number, onehundredeighties: number, average: number, checkout_ratio: number,
+    constructor(darts: number, last_dart: number, highfinish: number, onehundredeighties: number, highest_dart: number, average: number, checkout_ratio: number,
      onehundredsixties: number,
     onehundredfourties: number,
     onehundredtwenties: number,
@@ -294,6 +296,7 @@ class Statistics {
         this.darts = darts
         this.last_dart = last_dart
         this.highfinish = highfinish;
+        this.highest_dart = highest_dart;
         this.onehundredeighties = onehundredeighties;
         this.onehundredsixties = onehundredsixties;
         this.onehundredfourties = onehundredfourties;
@@ -357,6 +360,8 @@ const submit_score = async () => {
 
         // stats
         let _dart = Number(score_input.value) 
+
+        if (_dart >= player_one_stats.value.highest_dart) player_one_stats.value.highest_dart = _dart
 
         if (_dart == 180) player_one_stats.value.onehundredeighties++
         if (_dart >= 160 && _dart != 180) player_one_stats.value.onehundredsixties++
@@ -442,6 +447,8 @@ const submit_score = async () => {
         // stats
         let _dart = Number(score_input.value)
 
+        if (_dart >= player_two_stats.value.highest_dart) player_two_stats.value.highest_dart = _dart
+
         if (_dart == 180) player_two_stats.value.onehundredeighties++
         if (_dart >= 160 && _dart != 180) player_two_stats.value.onehundredsixties++
         if (_dart >= 140 && _dart < 160 && _dart != 180) player_two_stats.value.onehundredfourties++
@@ -522,8 +529,8 @@ const submit_score = async () => {
 }
 
 const initGame = () => {
-    player_one_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0)
-    player_two_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0)
+    player_one_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0,0)
+    player_two_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0,0)
 
     // initialize players
     player_one.value = new Player(1, gameConfig.value.player_one_name, gameConfig.value.player_one_name, gameConfig.value.score, 0, player_one_stats.value)
