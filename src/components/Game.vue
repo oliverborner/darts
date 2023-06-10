@@ -158,33 +158,33 @@
                 <th colspan="3"> Highscores</th>
                 <tr>
                     <td>180</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.onehundredeighties }}</td>
+                    <td>{{ player_two_stats.onehundredeighties }}</td>
                 </tr>
                 <tr>
                     <td>160+</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.onehundredsixties}}</td>
+                    <td>{{ player_two_stats.onehundredsixties }}</td>
                 </tr>
                 <tr>
                     <td>140+</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.onehundredfourties }}</td>
+                    <td>{{ player_two_stats.onehundredfourties }}</td>
                 </tr>
                 <tr>
                     <td>120+</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.onehundredtwenties }}</td>
+                    <td>{{ player_two_stats.onehundredtwenties }}</td>
                 </tr>
                 <tr>
                     <td>100+</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.onehundreds }}</td>
+                    <td>{{ player_two_stats.onehundreds}}</td>
                 </tr>
                 <tr>
                     <td>80+</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ player_one_stats.eighties}}</td>
+                    <td>{{ player_two_stats.eighties }}</td>
                 </tr>
             </table>
             <br>
@@ -218,6 +218,11 @@ interface Stats {
     last_dart: number
     highfinish: number
     onehundredeighties: number
+    onehundredsixties: number
+    onehundredfourties: number
+    onehundredtwenties: number
+    onehundreds: number
+    eighties: number
     average: number
     checkout_ratio: number
     // >=120, >=140, >=100
@@ -274,12 +279,27 @@ class Statistics {
     onehundredeighties: number;
     average: number;
     checkout_ratio: number;
+    onehundredsixties: number;
+    onehundredfourties: number;
+    onehundredtwenties: number;
+    onehundreds: number;
+    eighties: number;
 
-    constructor(darts: number, last_dart: number, highfinish: number, onehundredeighties: number, average: number, checkout_ratio: number) {
+    constructor(darts: number, last_dart: number, highfinish: number, onehundredeighties: number, average: number, checkout_ratio: number,
+     onehundredsixties: number,
+    onehundredfourties: number,
+    onehundredtwenties: number,
+    onehundreds: number,
+    eighties: number) {
         this.darts = darts
         this.last_dart = last_dart
         this.highfinish = highfinish;
         this.onehundredeighties = onehundredeighties;
+        this.onehundredsixties = onehundredsixties;
+        this.onehundredfourties = onehundredfourties;
+        this.onehundredtwenties = onehundredtwenties;
+        this.onehundreds = onehundreds;
+        this.eighties = eighties;
         this.average = average;
         this.checkout_ratio = checkout_ratio;
     }
@@ -334,6 +354,17 @@ const submit_score = async () => {
     if (_active_player == player_one.value.id) {
 
         let _temp_score = player_one.value.score - Number(score_input.value)
+
+        // stats
+        let _dart = Number(score_input.value) 
+
+        if (_dart == 180) player_one_stats.value.onehundredeighties++
+        if (_dart >= 160 && _dart != 180) player_one_stats.value.onehundredsixties++
+        if (_dart >= 140 && _dart < 160 && _dart != 180) player_one_stats.value.onehundredfourties++
+        if (_dart >= 120 && _dart < 140 && _dart != 180) player_one_stats.value.onehundredtwenties++
+        if (_dart >= 100 && _dart < 120 && _dart != 180) player_one_stats.value.onehundreds++
+        if (_dart >= 80 && _dart < 100 && _dart != 180) player_one_stats.value.eighties++  
+
 
         if (_temp_score > 0) {
 
@@ -408,6 +439,17 @@ const submit_score = async () => {
         // Player 2
         let _temp_score = player_two.value.score - Number(score_input.value)
 
+        // stats
+        let _dart = Number(score_input.value)
+
+        if (_dart == 180) player_two_stats.value.onehundredeighties++
+        if (_dart >= 160 && _dart != 180) player_two_stats.value.onehundredsixties++
+        if (_dart >= 140 && _dart < 160 && _dart != 180) player_two_stats.value.onehundredfourties++
+        if (_dart >= 120 && _dart < 140 && _dart != 180) player_two_stats.value.onehundredtwenties++
+        if (_dart >= 100 && _dart < 120 && _dart != 180) player_two_stats.value.onehundreds++
+        if (_dart >= 80 && _dart < 100 && _dart != 180) player_two_stats.value.eighties++
+
+
         if (_temp_score > 0) {
 
             if (_temp_score !== player_two.value.score) {
@@ -480,8 +522,8 @@ const submit_score = async () => {
 }
 
 const initGame = () => {
-    player_one_stats.value = new Statistics(0, 0, 0, 0, 0, 0)
-    player_two_stats.value = new Statistics(0, 0, 0, 0, 0, 0)
+    player_one_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0)
+    player_two_stats.value = new Statistics(0, 0, 0, 0, 0, 0,0,0,0,0,0)
 
     // initialize players
     player_one.value = new Player(1, gameConfig.value.player_one_name, gameConfig.value.player_one_name, gameConfig.value.score, 0, player_one_stats.value)
