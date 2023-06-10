@@ -363,9 +363,9 @@ a,
     font-size: 1.3rem;
     letter-spacing: 3px;
     padding-left: 1rem;
-    transition: 300ms all;
-  
+    transition: 300ms all; 
 }
+
 
 
 @media (min-width: 1024px) {
@@ -435,6 +435,7 @@ a,
 }
 
 
+
 /**
  * ----------------------------------------
  * animation slide-bottom
@@ -458,5 +459,70 @@ a,
   100% {
     -webkit-transform: translateY(0px);
             transform: translateY(0px);
+  }
+}
+ .score_title {
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+}
+
+.table-container {
+    margin: 1rem;
+    padding: 1rem;
+    border: 2px solid #1b1b1b;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 250;
+  top: 0;
+  left: 0;
+  background-color: #F88635;
+  color:#1b1b1b;
+  font-weight: bold;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.overlay a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+.overlay .closebtn {
+  position: absolute;
+ /*  top: 1rem; */
+  right: 1rem;
+  font-size: 60px;
+  color: #1b1b1b;
+}
+
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: 20px}
+  .overlay .closebtn {
+  font-size: 40px;
+  top: 15px;
+  right: 35px;
   }
 }

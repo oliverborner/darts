@@ -8,10 +8,10 @@
         </section>
 
         <section id="players">
+
             <div id="player-card" :class="gameConfig.current_player_id == 1 ? 'active-card' : ''">
                 <div class="big-number" id="count1">{{ player_one.score }}</div>
                 <span class="player-nickname">{{ player_one.nickname }}</span>
-                <!-- <span class="player-name">{{ player_one.name }}</span> -->
                 <div class="card-footer">
                     <span class="starting-player" v-if="gameConfig.starting_player_id == 1"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
@@ -22,10 +22,10 @@
                     <span v-else class="empty-circle">&nbsp;</span>
                 </div>
             </div>
+
             <div id="player-card" :class="gameConfig.current_player_id == 2 ? 'active-card' : ''">
                 <div class="big-number" id="count2">{{ player_two.score }}</div>
                 <span class="player-nickname">{{ player_two.nickname }}</span>
-                <!-- <span class="player-name">{{ player_two.name }}</span> -->
                 <div class="card-footer">
                     <span class="starting-player" v-if="gameConfig.starting_player_id == 2"></span>
                     <span v-else class="empty-circle">&nbsp;</span>
@@ -59,9 +59,9 @@
                     <span class="">3-Dart AVG </span>
                 </div>
                 <div class="stats-player white">
-                        <span class="">{{ player_two_stats.last_dart }}</span>
-                        <span class="">{{ player_two_stats.darts }} </span>
-                        <span class="">{{ player_two_stats.average.toFixed(1) }} </span>
+                    <span class="">{{ player_two_stats.last_dart }}</span>
+                    <span class="">{{ player_two_stats.darts }} </span>
+                    <span class="">{{ player_two_stats.average.toFixed(1) }} </span>
                 </div>  
             </div>
         </section>
@@ -79,7 +79,7 @@
             </div>
 
             <div class="controls-right">
-                <button type="button" class="num-button orange" @click="score_input = ''">
+                <button type="button" class="num-button orange" @click="openStats()">
                     S
                 </button>
                 <button type="button" class="num-button light" @click="score_input = ''">
@@ -105,13 +105,19 @@
     <div id="player_two">{{ player_two }}</div>
  -->
 
-      
-<!--     <p>score_table</p>
-    <ul>
-        <li v-for="entry in score_table.slice(1)">
-            Round: {{ entry.round }},  Player: {{ entry.player_id }} {{ entry.name }}, Score: {{ entry.score }},  Score Thrown: {{ entry.score_thrown }}  
-        </li>
-    </ul>  -->
+    <div id="score_table" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" @click="closeStats()">&times;</a>
+        <div class="table-container">
+            
+            <span class="score_title">Scores</span>
+
+            <div v-for="entry in score_table.slice(1)">
+               {{ entry.round }},  Player: {{ entry.player_id }} {{ entry.name }}, Score: {{ entry.score }},  Score Thrown: {{ entry.score_thrown }}  
+            </div>
+
+        </div>
+    </div> 
+
     </div>
 </template>
 
@@ -260,7 +266,7 @@ const submit_score = async () => {
             player_one.value.score = _temp_score
 
             score_table.value.push({
-                round: gameConfig.value.round,
+                round: -Math.round(-gameConfig.value.round),
                 score: player_one.value.score,
                 player_id: player_one.value.id,
                 score_thrown: Number(score_input.value),
@@ -278,34 +284,40 @@ const submit_score = async () => {
         }
 
         // winner
-        if (_temp_score == 0) { 
+        if (_temp_score == 0 && player_one.value.leg < 3) { 
 
             player_one.value.leg++
 
-            if (_temp_score !== player_one.value.score) {
+      /*       if (_temp_score !== player_one.value.score) {
                 counter("count1", player_one.value.score, _temp_score, 500);
-            }
+            } */
 
-            player_one.value.score = _temp_score
+            player_one.value.score = 501
 
             score_table.value.push({
-                round: gameConfig.value.round,
+                round: -Math.round(-gameConfig.value.round),
                 score: player_one.value.score,
                 player_id: player_one.value.id,
                 score_thrown: Number(score_input.value),
                 name: player_one.value.name
             })
 
+            alert(player_one.value.name + 'won the Leg! ' + player_one_stats.value.darts + ' Darts thrown with an 3-Dart average of ' + player_one_stats.value.average.toFixed(1))
 
-            await reset_stats()
+            reset_stats()
 
             if (gameConfig.value.starting_player_id == 1) { 
                 gameConfig.value.starting_player_id = 2
                 gameConfig.value.current_player_id = 2
             }
 
-            gameConfig.value.round = 0
+            gameConfig.value.round = 1
 
+        }
+
+        if (player_one.value.leg == 3) {
+            alert(player_one.value.name + 'won the Game!')
+            emit('reset')
         }
 
 
@@ -344,34 +356,40 @@ const submit_score = async () => {
         }
 
         // winner
-        if (_temp_score == 0) {
+        if (_temp_score == 0 && player_two.value.leg < 3) {
 
             player_two.value.leg++
 
-            if (_temp_score !== player_two.value.score) {
+           /*  if (_temp_score !== player_two.value.score) {
                 counter("count1", player_two.value.score, _temp_score, 500);
-            }
+            } */
 
-            player_two.value.score = _temp_score
+            player_two.value.score = 501
 
             score_table.value.push({
-                round: gameConfig.value.round,
+                round: -Math.round(-gameConfig.value.round),
                 score: player_two.value.score,
                 player_id: player_two.value.id,
                 score_thrown: Number(score_input.value),
                 name: player_two.value.name
             })
 
+            alert(player_two.value.name + 'won the Leg! ' + player_two_stats.value.darts + ' Darts thrown with an 3-Dart average of ' + player_two_stats.value.average.toFixed(1))
 
-            await reset_stats()
+            reset_stats()
 
             if (gameConfig.value.starting_player_id == 2) {
                 gameConfig.value.starting_player_id = 1
                 gameConfig.value.current_player_id = 1
             }
             
-            gameConfig.value.round = 0
+            gameConfig.value.round = 1
 
+        }
+
+        if (player_two.value.leg == 3) {
+            alert(player_two.value.name + 'won the Game!')
+            emit('reset')
         }
 
         if (_checkoutData.hasOwnProperty(player_one.value.score)) {
@@ -415,6 +433,16 @@ const reset_stats = async () => {
     player_two_stats.value.darts = 0;
 
 }
+
+const openStats = () => {
+
+    document.getElementById("score_table").style.width = "100%";
+}
+const closeStats = () => {
+    document.getElementById("score_table").style.width = "0%";
+
+}
+
 
 
 // helper functions
