@@ -107,6 +107,7 @@
 
     <div id="score_table" class="overlay">
         <a href="javascript:void(0)" class="closebtn" @click="closeStats()">&times;</a>
+        <div class="wrapper">
         <div class="table-container">
             
             <span class="score_title">Statistics</span>
@@ -193,6 +194,7 @@
                {{ entry.round }},  Player: {{ entry.player_id }} {{ entry.name }}, Score: {{ entry.score }},  Score Thrown: {{ entry.score_thrown }}  
             </div>
  -->
+        </div>
         </div>
     </div> 
 
