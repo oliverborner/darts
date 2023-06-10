@@ -476,9 +476,27 @@ a,
     flex-direction: column;
 }
 
+table {
+    width: 100%;
+}
+
+table, tr, td{ 
+    border: 1px solid #1b1b1b;
+     border-collapse: collapse;
+}
+table, td{ 
+   padding: .3rem;
+}
+th{ 
+   padding: .3rem;
+   background-color: #1b1b1b;
+   color:#F88635;
+   font-weight: bold;
+}
 .overlay {
   height: 100%;
-  width: 0;
+    width: 100%;
+  display: none;
   position: fixed;
   z-index: 250;
   top: 0;
@@ -512,7 +530,7 @@ a,
 
 .overlay .closebtn {
   position: absolute;
- /*  top: 1rem; */
+  top: -1rem; 
   right: 1rem;
   font-size: 60px;
   color: #1b1b1b;

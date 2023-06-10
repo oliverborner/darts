@@ -109,8 +109,86 @@
         <a href="javascript:void(0)" class="closebtn" @click="closeStats()">&times;</a>
         <div class="table-container">
             
-            <span class="score_title">Scores</span>
+            <span class="score_title">Statistics</span>
 
+            <table>
+                <th colspan="3"> {{ gameConfig.gamemode }}</th>
+                <tr>
+                    <td>Player</td>
+                    <td>{{ player_one.name }}</td>
+                    <td>{{ player_two.name }}</td>
+                </tr>
+                <tr>
+                    <td>Legs</td>
+                    <td>{{ player_one.leg }}</td>
+                    <td>{{ player_two.leg }}</td>
+                </tr>
+                <th colspan="3"> Averages</th>
+                <tr>
+                    <td>3-Dart AVG</td>
+                    <td>{{ player_one_stats.average.toFixed(1) }}</td>
+                    <td>{{ player_two_stats.average.toFixed(1) }}</td>
+                </tr>
+                 <tr>
+                    <td>Highest Dart</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <th colspan="3"> Checkouts</th>
+                <tr>
+                    <td>Highest finish</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Checkoutrate %</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Best leg</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Worst leg</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <th colspan="3"> Highscores</th>
+                <tr>
+                    <td>180</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>160+</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>140+</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>120+</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>100+</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>80+</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <br>
+            <p>Gamelog:</p>
             <div v-for="entry in score_table.slice(1)">
                {{ entry.round }},  Player: {{ entry.player_id }} {{ entry.name }}, Score: {{ entry.score }},  Score Thrown: {{ entry.score_thrown }}  
             </div>
@@ -436,10 +514,10 @@ const reset_stats = async () => {
 
 const openStats = () => {
 
-    document.getElementById("score_table").style.width = "100%";
+    document.getElementById("score_table").style.display = "block";
 }
 const closeStats = () => {
-    document.getElementById("score_table").style.width = "0%";
+    document.getElementById("score_table").style.display = "none";
 
 }
 
