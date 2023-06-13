@@ -3,6 +3,8 @@
   "include": ["vite.config.*", "vitest.config.*", "cypress.config.*", "playwright.config.*"],
   "compilerOptions": {
     "composite": true,
+     "allowJs": true,
+    "checkJs": false,
     "module": "ESNext",
     "types": ["node"],
   }

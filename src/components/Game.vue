@@ -318,8 +318,12 @@ let player_two_stats = ref(<Statistics>{})
 
 let gameConfig = ref(props.config)
 
+interface checkoutType{
+    [key: number]: string;
+}
 
-let _checkoutData = checkoutTable()
+let _checkoutData: checkoutType = checkoutTable()
+
 let checkdarts = ref('')
 
 
@@ -436,9 +440,10 @@ const submit_score = async () => {
             emit('reset')
         }
 
+    
 
         if (_checkoutData.hasOwnProperty(player_two.value.score)) {
-            checkdarts.value = _checkoutData[player_two.value.score]
+            checkdarts.value  = _checkoutData[player_two.value.score] 
         }
 
     } else {
@@ -564,11 +569,12 @@ const reset_stats = async () => {
 }
 
 const openStats = () => {
-
-    document.getElementById("score_table").style.display = "block";
+    let _el = document.getElementById("score_table") as HTMLElement;
+    _el.style.display = "block";
 }
 const closeStats = () => {
-    document.getElementById("score_table").style.display = "none";
+    let _el = document.getElementById("score_table") as HTMLElement;
+    _el.style.display  = "none";
 
 }
 
@@ -583,7 +589,7 @@ const counter = async (id: string, start: number, end: number, duration: number)
         step = Math.abs(Math.floor(duration / range)),
         timer = setInterval(() => {
             current += increment;
-            obj.textContent = current;
+            obj.textContent = current.toString();
             if (current == end) {
                 clearInterval(timer);
             }
